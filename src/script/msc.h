@@ -11,23 +11,11 @@ void msc_init_all (void) {
 
 unsigned char read_byte (void) {
     #asm
-        #ifdef MODE_128K
-            di
-            ld b, SCRIPT_PAGE
-            call SetRAMBank
-        #endif
-
             ld  hl, (_script)
             ld  a, (hl)
             ld  (_safe_byte), a
             inc hl
             ld  (_script), hl
-
-        #ifdef MODE_128K
-            ld b, 0
-            call SetRAMBank
-            ei
-        #endif
     #endasm
     return safe_byte;
 }
@@ -69,11 +57,6 @@ void read_two_bytes_D_E (void) {
     #asm
             // Read two bytes: flag #, number
 
-            #ifdef MODE_128K
-                di
-                ld  b, SCRIPT_PAGE
-                call SetRAMBank
-            #endif
 
                 ld  hl, (_script)
                 ld  d, (hl)         // flag #
@@ -82,11 +65,6 @@ void read_two_bytes_D_E (void) {
                 inc hl
                 ld  (_script), hl
 
-            #ifdef MODE_128K
-                ld  b, 0
-                call SetRAMBank
-                ei
-            #endif
     #endasm
 }
 unsigned char *next_script;
@@ -98,13 +76,6 @@ void run_script (unsigned char whichs) {
     debug_print_16bits (0, 23, asm_int);
 #endif
 
-#ifdef MODE_128K
-    #asm
-        di
-        ld b, SCRIPT_PAGE
-        call SetRAMBank
-    #endasm
-#endif
 
     #asm
         ld hl, (_asm_int)
@@ -115,13 +86,6 @@ void run_script (unsigned char whichs) {
         ld  (_script), hl
     #endasm
 
-#ifdef MODE_128K
-    #asm
-        ld b, 0
-        call SetRAMBank
-        ei
-    #endasm
-#endif
 
 #ifdef DEBUG
     debug_print_16bits (5, 23, (unsigned int) script);
@@ -141,6 +105,10 @@ void run_script (unsigned char whichs) {
         sc_terminado = sc_continuar = 0;
         while (!sc_terminado) {
             switch (read_byte ()) {
+                case 0xF0:
+                     // IF TRUE
+                     // Opcode: F0
+                     break;
                 case 0xFF:
                     // THEN
                     // Opcode: FF
@@ -153,6 +121,19 @@ void run_script (unsigned char whichs) {
             sc_terminado = 0;
             while (!sc_terminado) {
                 switch (read_byte ()) {
+                    case 0x01:
+                        // SET FLAG sc_x = sc_n
+                        // Opcode: 01 sc_x sc_n
+                        #asm
+                                call _readxy
+                                ld  de, (_sc_x)
+                                ld  d, 0
+                                ld  hl, _flags
+                                add hl, de
+                                ld  a, (_sc_y)
+                                ld  (hl), a
+                        #endasm
+                        break;
                     case 0xFF:
                         sc_terminado = 1;
                         break;
