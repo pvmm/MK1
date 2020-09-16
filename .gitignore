@@ -5,3 +5,5 @@ desktop.ini
 *.scr
 src/script/msc-config.h
 src/script/msc.h
+src/dev/my/msc.h
+src/dev/my/msc-config.h

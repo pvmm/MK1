@@ -1,7 +1,7 @@
 #!/bin/sh
 
 export MK1_HOME=/home/pedro_/Sync/Softwares/gnu_linux/MK1
-Z88DK=$MK1_HOME/env/z88dk10
+export Z88DK=$MK1_HOME/env/z88dk10
 export PATH=$Z88DK/bin:$PATH
 export ZCCCFG=$MK1_HOME/env/z88dk10/lib/config/
 GAME=dogmole
@@ -22,9 +22,9 @@ compile()
     ../utils/printsize scripts.bin
 
     echo -e "\e[32mConstruyendo cinta\e[0m"
-    wine ../utils/bas2tap.exe -a10 -s$LABEL loader/loader.bas loader.tap > /dev/null
-    wine ../utils/bin2tap.exe -o screen.tap -a 16384 loading.bin > /dev/null
-    wine ../utils/bin2tap.exe -o main.tap -a 24000 $GAME.bin > /dev/null
+    ../utils/bas2tap -a10 -s$LABEL loader/loader.bas loader.tap > /dev/null
+    ../utils/bin2tap -o screen.tap -a 16384 loading.bin > /dev/null
+    ../utils/bin2tap -o main.tap -a 24000 $GAME.bin > /dev/null
     cat loader.tap screen.tap main.tap 1> $GAME.tap 2> /dev/null
 }
 
@@ -39,6 +39,8 @@ clean()
     rm ../script/msc.h
     rm ../script/msc-config.h
     rm ../script/scripts.bin
+    rm my/msc.h
+    rm my/msc-config.h
 }
 
 script()
@@ -48,7 +50,7 @@ script()
     then
         echo -e "\e[32mCompilando script\e[0m"
         winetest
-        wine ../utils/msc3_mk1.exe $GAME.spt 30 > /dev/null
+        ../utils/msc3_mk1 $GAME.spt 30 > /dev/null
         cp msc.h ../dev/my > /dev/null
         cp msc-config.h ../dev/my > /dev/null
         cp scripts.bin ../dev/ > /dev/null
@@ -76,29 +78,31 @@ assets()
     wine ../utils/png2scr.exe ../gfx/marco.png ../gfx/marco.scr > /dev/null
     wine ../utils/png2scr.exe ../gfx/ending.png ../gfx/ending.scr > /dev/null
     wine ../utils/png2scr.exe ../gfx/loading.png loading.bin > /dev/null
-    wine ../utils/apultra.exe ../gfx/title.scr title.bin > /dev/null
-    wine ../utils/apultra.exe ../gfx/marco.scr marco.bin > /dev/null
-    wine ../utils/apultra.exe ../gfx/ending.scr ending.bin > /dev/null
+    ../utils/apultra ../gfx/title.scr title.bin > /dev/null
+    ../utils/apultra ../gfx/marco.scr marco.bin > /dev/null
+    ../utils/apultra ../gfx/ending.scr ending.bin > /dev/null
 }
 
 case "$1" in
+    all)
+        script
+        assets
+        compile
+        clean
+        ;;
     justcompile)
         compile
         clean
-        exit 0
         ;;
     clean)
         clean
-        exit 0
         ;;
     justscripts)
         script
-        exit 0
         ;;
     justassets)
         script
         assets
-        exit 0
         ;;
     noclean)
         script
