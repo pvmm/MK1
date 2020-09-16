@@ -1,6 +1,7 @@
 ' asm2z88dk v0.1 20200120
 ' prepares a standard .asm file to be included in a z88dk C project
 ' Copyleft 2020 by The Mojon Twins
+' fbc asm2z88dk.bas mtparser.bas
 
 #include "mtparser.bi"
 
