@@ -1,6 +1,6 @@
 # Fork notes
 
-This is a fork of Mojon Twins' MK1 game engine for people interested in writing Speccy games on their favorite distro instead of booting into Windows. To use it, unpack `env/z88dk10-stripped.zip` in the same directory and call `src/dev/compile.sh`. Wine is also required since there are lots of executables for packing assets into `.tap` files.
+This is a fork of Mojon Twins' MK1 game engine for people interested in writing Speccy games on their favorite distro instead of booting into Windows. To use it, unpack `env/z88dk10-stripped.zip` in the same directory and call `src/dev/compile.sh`. Wine may be required since there are tools for packing assets into `.tap` files.
 
 # MTE MK1 (la Churrera)
 

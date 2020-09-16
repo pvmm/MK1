@@ -17,14 +17,13 @@ compile()
 {
     echo -e "\e[32mCompilando guego\e[0m"
     zcc +zx -vn mk1.c -o $GAME.bin -lsplib2_mk2.lib -zorg=24000 > /dev/null
-    winetest
-    wine ../utils/printsize.exe $GAME.bin
-    wine ../utils/printsize.exe scripts.bin
+    ../utils/printsize $GAME.bin
+    ../utils/printsize scripts.bin
 
     echo -e "\e[32mConstruyendo cinta\e[0m"
-    wine ../utils/bas2tap -a10 -s$LABEL loader/loader.bas loader.tap > /dev/null
-    wine ../utils/bin2tap -o screen.tap -a 16384 loading.bin > /dev/null
-    wine ../utils/bin2tap -o main.tap -a 24000 $GAME.bin > /dev/null
+    ../utils/bas2tap -a10 -s$LABEL loader/loader.bas loader.tap > /dev/null
+    ../utils/bin2tap -o screen.tap -a 16384 loading.bin > /dev/null
+    ../utils/bin2tap -o main.tap -a 24000 $GAME.bin > /dev/null
     cat loader.tap screen.tap main.tap 1> $GAME.tap 2> /dev/null
 }
 
@@ -44,8 +43,7 @@ script()
     if [ -f $GAME.spt ]
     then
         echo -e "\e[32mCompilando script\e[0m"
-        winetest
-        wine ../utils/msc3_mk1.exe $GAME.spt 30 > /dev/null
+        ../utils/msc3_mk1 $GAME.spt 30 > /dev/null
         cp msc.h ../dev/my > /dev/null
         cp msc-config.h ../dev/my > /dev/null
         cp scripts.bin ../dev/ > /dev/null
@@ -56,26 +54,26 @@ script()
 assets()
 {
     echo -e "\e[32mConvirtiendo mapa\e[0m"
-    wine ../utils/mapcnv.exe ../map/mapa.map assets/mapa.h 6 5 15 10 15 packed > /dev/null
+    ../utils/mapcnv ../map/mapa.map assets/mapa.h 6 5 15 10 15 packed > /dev/null
 
     echo -e "\e[32mConvirtiendo enemigos/hotspots\e[0m"
-    wine ../utils/ene2h.exe ../enems/enems.ene assets/enems.h
+    ../utils/ene2h ../enems/enems.ene assets/enems.h
 
     echo -e "\e[32mImportando GFX\e[0m"
-    wine ../utils/ts2bin.exe ../gfx/font.png ../gfx/work.png tileset.bin 7 >/dev/null
+    ../utils/ts2bin ../gfx/font.png ../gfx/work.png tileset.bin 7 >/dev/null
 
-    wine ../utils/sprcnv.exe ../gfx/sprites.png assets/sprites.h > /dev/null
+    ../utils/sprcnv ../gfx/sprites.png assets/sprites.h > /dev/null
 
-    wine ../utils/sprcnvbin.exe ../gfx/sprites_extra.png sprites_extra.bin 1 > /dev/null
-    wine ../utils/sprcnvbin8.exe ../gfx/sprites_bullet.png sprites_bullet.bin 1 > /dev/null
+    ../utils/sprcnvbin ../gfx/sprites_extra.png sprites_extra.bin 1 > /dev/null
+    ../utils/sprcnvbin8 ../gfx/sprites_bullet.png sprites_bullet.bin 1 > /dev/null
 
-    wine ../utils/png2scr.exe ../gfx/title.png ../gfx/title.scr > /dev/null
-    wine ../utils/png2scr.exe ../gfx/marco.png ../gfx/marco.scr > /dev/null
-    wine ../utils/png2scr.exe ../gfx/ending.png ../gfx/ending.scr > /dev/null
-    wine ../utils/png2scr.exe ../gfx/loading.png loading.bin > /dev/null
-    wine ../utils/apultra.exe ../gfx/title.scr title.bin > /dev/null
-    wine ../utils/apultra.exe ../gfx/marco.scr marco.bin > /dev/null
-    wine ../utils/apultra.exe ../gfx/ending.scr ending.bin > /dev/null
+    ../utils/png2scr ../gfx/title.png ../gfx/title.scr > /dev/null
+    ../utils/png2scr ../gfx/marco.png ../gfx/marco.scr > /dev/null
+    ../utils/png2scr ../gfx/ending.png ../gfx/ending.scr > /dev/null
+    ../utils/png2scr ../gfx/loading.png loading.bin > /dev/null
+    ../utils/apultra ../gfx/title.scr title.bin > /dev/null
+    ../utils/apultra ../gfx/marco.scr marco.bin > /dev/null
+    ../utils/apultra ../gfx/ending.scr ending.bin > /dev/null
 }
 
 case "$1" in
