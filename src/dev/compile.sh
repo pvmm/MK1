@@ -1,9 +1,9 @@
 #!/bin/sh
 
-Z88DK=../../env/z88dk10
+export MK1_HOME=/home/pedro_/Sync/Softwares/gnu_linux/MK1
+Z88DK=$MK1_HOME/env/z88dk10
 export PATH=$Z88DK/bin:$PATH
-#export ZCCCFG=/home/pedro_/Sync/Softwares/gnu_linux/churrera/MK1/env/z88dk10/lib/config/
-export ZCCCFG=../../env/z88dk10/lib/config/
+export ZCCCFG=$MK1_HOME/env/z88dk10/lib/config/
 GAME=dogmole
 LABEL=$(echo $GAME | tr '[:lower:]' '[:upper:]') 
 
@@ -18,13 +18,13 @@ compile()
     echo -e "\e[32mCompilando guego\e[0m"
     zcc +zx -vn mk1.c -o $GAME.bin -lsplib2_mk2.lib -zorg=24000 > /dev/null
     winetest
-    wine ../utils/printsize.exe $GAME.bin
-    wine ../utils/printsize.exe scripts.bin
+    ../utils/printsize $GAME.bin
+    ../utils/printsize scripts.bin
 
     echo -e "\e[32mConstruyendo cinta\e[0m"
-    wine ../utils/bas2tap -a10 -s$LABEL loader/loader.bas loader.tap > /dev/null
-    wine ../utils/bin2tap -o screen.tap -a 16384 loading.bin > /dev/null
-    wine ../utils/bin2tap -o main.tap -a 24000 $GAME.bin > /dev/null
+    wine ../utils/bas2tap.exe -a10 -s$LABEL loader/loader.bas loader.tap > /dev/null
+    wine ../utils/bin2tap.exe -o screen.tap -a 16384 loading.bin > /dev/null
+    wine ../utils/bin2tap.exe -o main.tap -a 24000 $GAME.bin > /dev/null
     cat loader.tap screen.tap main.tap 1> $GAME.tap 2> /dev/null
 }
 
@@ -36,6 +36,9 @@ clean()
     rm main.tap > /dev/null
     rm ../gfx/*.scr > /dev/null
     rm *.bin > /dev/null
+    rm ../script/msc.h
+    rm ../script/msc-config.h
+    rm ../script/scripts.bin
 }
 
 script()
@@ -62,7 +65,7 @@ assets()
     wine ../utils/ene2h.exe ../enems/enems.ene assets/enems.h
 
     echo -e "\e[32mImportando GFX\e[0m"
-    wine ../utils/ts2bin.exe ../gfx/font.png ../gfx/work.png tileset.bin 7 >/dev/null
+    wine ../utils/ts2bin.exe ../gfx/font.png ../gfx/work.png tileset.bin 7 > /dev/null
 
     wine ../utils/sprcnv.exe ../gfx/sprites.png assets/sprites.h > /dev/null
 

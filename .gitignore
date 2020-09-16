@@ -1,3 +1,7 @@
 desktop.ini
 *.sublime-workspace
-
+*.tap
+*.bin
+*.scr
+src/script/msc-config.h
+src/script/msc.h
