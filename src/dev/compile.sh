@@ -1,9 +1,9 @@
 #!/bin/sh
 
-Z88DK=../../env/z88dk10
+export MK1_HOME=/home/pedro_/Sync/Softwares/gnu_linux/MK1
+Z88DK=$MK1_HOME/env/z88dk10
 export PATH=$Z88DK/bin:$PATH
-#export ZCCCFG=/home/pedro_/Sync/Softwares/gnu_linux/churrera/MK1/env/z88dk10/lib/config/
-export ZCCCFG=../../env/z88dk10/lib/config/
+export ZCCCFG=$MK1_HOME/env/z88dk10/lib/config/
 GAME=dogmole
 LABEL=$(echo $GAME | tr '[:lower:]' '[:upper:]') 
 

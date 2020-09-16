@@ -1,3 +1,5 @@
 desktop.ini
 *.sublime-workspace
-
+*.tap
+*.bin
+*.scr
